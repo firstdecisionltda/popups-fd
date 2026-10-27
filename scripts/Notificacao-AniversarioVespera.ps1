@@ -32,7 +32,7 @@ $ManifestLocal = "C:\ProgramData\FirstDecision\PopupScripts\manifest.json"
 
 # ====================== CONFIGURACAO - MENSAGEM DO POPUP ======================
 $Linha1         = "Seu aniversário está chegando!"
-$Linha2         = "A First Decision te parabeniza e deseja um novo ciclo cheio de sucesso e conquistas. Aproveite seu dia!"
+$Linha2         = "A First deseja que seu novo ciclo seja repleto de alegrias, conquistas e bons momentos."
 $TempoAutoFecha = 60
 
 $CorFundo       = [System.Drawing.Color]::FromArgb(255, 255, 255, 255)
