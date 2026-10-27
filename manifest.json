@@ -1,0 +1,73 @@
+{
+  "version": "2026.10.26.10",
+  "config": {
+    "checkinUrl": "",
+    "aniversarioUrl": ""
+  },
+  "launcher": {
+    "sha256": "99CACAC77B5107EE4C8B0B9A7F64E2165577F5B30B55E55754955B31DA7C5559"
+  },
+  "schedules": [
+    {
+      "name": "news",
+      "type": "daily",
+      "time": "14:00"
+    },
+    {
+      "name": "aniversario",
+      "type": "daily",
+      "time": "10:30"
+    },
+    {
+      "name": "aniversario_vespera",
+      "type": "daily",
+      "time": "10:30"
+    },
+    {
+      "name": "bem_estar",
+      "type": "daily",
+      "time": [
+        "10:30",
+        "15:30"
+      ]
+    }
+  ],
+  "assets": [
+    {
+      "repoPath": "images/outubro.jpg",
+      "localName": "wallpaper.jpg",
+      "sha256": "2450EDA9E2C634A95E6AE33B6D2357F764E41E66A5F2B17AA88ABA2BA521192D"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "Notificacao-FirstNews.ps1",
+      "run": false,
+      "trigger": "news",
+      "sha256": "3106BDCD83D11014F64FFA0AC02C11F20C8E08EA6C8126AC209A9652485D73A4"
+    },
+    {
+      "name": "Notificacao-Aniversario.ps1",
+      "run": true,
+      "trigger": "aniversario",
+      "sha256": "1DF584CCE48B6E80677E4A78D4397068FBF7852D429360F12D287E7DFDDF9384"
+    },
+    {
+      "name": "Notificacao-AniversarioVespera.ps1",
+      "run": true,
+      "trigger": "aniversario_vespera",
+      "sha256": "D9607F77D18CCDD0E5721F28F544A6BCD9C40D5A9CB8B1C947174A2294318CBD"
+    },
+    {
+      "name": "Notificacao-BemEstar.ps1",
+      "run": true,
+      "trigger": "bem_estar",
+      "sha256": "E263E3391B38DBF36DDD4AF772EC97B764E427DE9ACECDA030B8DFE30F8858C1"
+    },
+    {
+      "name": "Atualizar-Wallpaper.ps1",
+      "run": true,
+      "sha256": "8CD4DE2EDA8F116BFADE603E5AB89FF2AA15D971DAEDE653753D0734C208614A"
+    }
+  ]
+}

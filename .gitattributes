@@ -1,0 +1,3 @@
+# Nada de conversão de fim de linha: o SHA-256 do manifest precisa bater
+# byte a byte com o arquivo que o GitHub entrega.
+* -text
