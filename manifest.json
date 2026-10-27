@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.26.11",
+  "version": "2026.10.27.01",
   "config": {
     "checkinUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/36e1e69c89e84bb6b2cf00e189b1e495/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BgiBBEiu3MnFrFTFEXBEpFp7LHOeEr6hXHwZ2y1w2YE",
     "aniversarioUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b688b034bc624b1390753e01c5eadfa9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WjGDxkh2VszrD2kPSj8nnwFbi564bUkVNNxTnMkSCfw"
@@ -56,7 +56,7 @@
       "name": "Notificacao-AniversarioVespera.ps1",
       "run": true,
       "trigger": "aniversario_vespera",
-      "sha256": "D9607F77D18CCDD0E5721F28F544A6BCD9C40D5A9CB8B1C947174A2294318CBD"
+      "sha256": "21E32A7834DE6792E58B5F71497B3E66CB002939165DD56E857DD8392BF4784E"
     },
     {
       "name": "Notificacao-BemEstar.ps1",
