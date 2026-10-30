@@ -42,6 +42,7 @@
 
 param(
     [string]$RunScript = "",   # se informado: executa só esse script cacheado e sai (sem sync)
+    [switch]$IgnorarHorario,    # só com -RunScript: roda mesmo fora do horário agendado (teste manual)
     [switch]$Bootstrap          # marca explicitamente "isto é uma instalação inicial vinda do SYSVOL/GPO" -
                                 # não depende de comparar caminhos (frágil: o BootstrapSilencioso.vbs já
                                 # copia o arquivo pra local ANTES de rodar, então $PSCommandPath nunca
@@ -514,12 +515,43 @@ function Send-CheckIn {
 # ============================================================
 # MODO RÁPIDO: -RunScript informado -> só executa e sai, sem tocar em rede.
 # ============================================================
+function Test-DentroDaJanela {
+    # Popup só faz sentido no horário agendado. Se a tarefa disparar fora dele
+    # (máquina que acordou/ligou depois, tarefa atrasada por qualquer motivo),
+    # o script não roda. Vale só para schedules "daily" - os demais não têm
+    # horário fixo para comparar. Qualquer falha na leitura do manifest local
+    # conta como "fora da janela": melhor pular um popup do que mostrá-lo tarde.
+    param([string]$ScriptName, [int]$ToleranciaMinutos = 5)
+    try {
+        $m = Get-Content -Path $ManifestLocal -Raw -Encoding UTF8 | ConvertFrom-Json
+        $item = @($m.scripts | Where-Object { $_.name -eq $ScriptName })[0]
+        if (-not $item -or -not $item.trigger) { return $true }
+        $sched = @($m.schedules | Where-Object { $_.name -eq $item.trigger })[0]
+        if (-not $sched -or $sched.type -ne "daily") { return $true }
+        $agora = Get-Date
+        foreach ($h in @($sched.time)) {
+            $alvo = [datetime]::ParseExact("$h", "HH:mm", [Globalization.CultureInfo]::InvariantCulture)
+            $atraso = ($agora - $alvo).TotalMinutes
+            if ($atraso -ge -1 -and $atraso -le $ToleranciaMinutos) { return $true }
+        }
+        Write-Log "Fora da janela de horário ($($sched.time -join ', ') +${ToleranciaMinutos} min); agora são $($agora.ToString('HH:mm:ss'))." "WARN"
+        return $false
+    } catch {
+        Write-Log "Não foi possível conferir o horário agendado de $ScriptName ($($_.Exception.Message)). Popup pulado." "WARN"
+        return $false
+    }
+}
+
 if ($RunScript) {
     Write-Log "===== Execução direta (RunScript: $RunScript) ====="
     $localScriptPath = Join-Path $CacheDir $RunScript
     if (-not (Test-Path $localScriptPath)) {
         Write-Log "$RunScript não encontrado no cache local ($localScriptPath)." "ERROR"
         exit 1
+    }
+    if (-not $IgnorarHorario -and -not (Test-DentroDaJanela -ScriptName $RunScript)) {
+        Write-Log "$RunScript NÃO executado: fora do horário agendado. ===== Fim da execução direta ====="
+        exit 0
     }
     Invoke-CachedScript -ScriptPath $localScriptPath
     Write-Log "===== Fim da execução direta ====="

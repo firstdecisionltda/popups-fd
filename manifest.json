@@ -1,11 +1,11 @@
 {
-  "version": "2026.10.27.01",
+  "version": "2026.10.30.01",
   "config": {
     "checkinUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/36e1e69c89e84bb6b2cf00e189b1e495/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BgiBBEiu3MnFrFTFEXBEpFp7LHOeEr6hXHwZ2y1w2YE",
     "aniversarioUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b688b034bc624b1390753e01c5eadfa9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WjGDxkh2VszrD2kPSj8nnwFbi564bUkVNNxTnMkSCfw"
   },
   "launcher": {
-    "sha256": "99CACAC77B5107EE4C8B0B9A7F64E2165577F5B30B55E55754955B31DA7C5559"
+    "sha256": "D46AA7897AFEE501A73E9630D5A88FF4661141C52C026A4642B3082F5B142DBF"
   },
   "schedules": [
     {
@@ -16,12 +16,12 @@
     {
       "name": "aniversario",
       "type": "daily",
-      "time": "10:30"
+      "time": "10:45"
     },
     {
       "name": "aniversario_vespera",
       "type": "daily",
-      "time": "10:30"
+      "time": "10:45"
     },
     {
       "name": "bem_estar",
@@ -50,19 +50,19 @@
       "name": "Notificacao-Aniversario.ps1",
       "run": true,
       "trigger": "aniversario",
-      "sha256": "1DF584CCE48B6E80677E4A78D4397068FBF7852D429360F12D287E7DFDDF9384"
+      "sha256": "B9EDF2189B2B440D2F54A8B0D54A74054330EF3B2B2A819BF86C5FC78D0C255B"
     },
     {
       "name": "Notificacao-AniversarioVespera.ps1",
       "run": true,
       "trigger": "aniversario_vespera",
-      "sha256": "21E32A7834DE6792E58B5F71497B3E66CB002939165DD56E857DD8392BF4784E"
+      "sha256": "68C579DC3F4B38BD6A1B4904DE3CEBC69248DE1EBEAA93143D292FC7CBC85EA2"
     },
     {
       "name": "Notificacao-BemEstar.ps1",
       "run": true,
       "trigger": "bem_estar",
-      "sha256": "E263E3391B38DBF36DDD4AF772EC97B764E427DE9ACECDA030B8DFE30F8858C1"
+      "sha256": "97736C4B8E0DE6F7B69A8E9350EB191F8C803BC4C3AF8972D20BC8C59636953E"
     },
     {
       "name": "Atualizar-Wallpaper.ps1",
