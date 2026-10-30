@@ -82,7 +82,12 @@ try {
     $acao = New-ScheduledTaskAction -Execute "wscript.exe" -Argument """$Oculto"""
     $cfg = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
 
-    $logado = @(Get-Process -Name explorer -IncludeUserName -ErrorAction SilentlyContinue | Where-Object { $_.UserName -and $_.UserName -notmatch 'SYSTEM$' } | Select-Object -ExpandProperty UserName -Unique)
+    # Ignora contas de suporte/administração (as tarefas dos popups ficam no perfil de quem instala,
+    # então instalar como "suporte" deixaria o usuário real sem popup). Se só elas estiverem logadas,
+    # cai no ramo "ninguém logado": a instalação conclui no próximo logon do usuário real.
+    $logado = @(Get-Process -Name explorer -IncludeUserName -ErrorAction SilentlyContinue | Where-Object { $_.UserName -and $_.UserName -notmatch 'SYSTEM$' -and $_.UserName -notmatch '(^|\\)(suporte|administrador|administrator)$' } | Select-Object -ExpandProperty UserName -Unique)
+    $ignorados = @(Get-Process -Name explorer -IncludeUserName -ErrorAction SilentlyContinue | Where-Object { $_.UserName -and $_.UserName -match '(^|\\)(suporte|administrador|administrator)$' } | Select-Object -ExpandProperty UserName -Unique)
+    if ($ignorados.Count -gt 0) { Log "Sessões de suporte ignoradas: $($ignorados -join ', ')." "WARN" }
     if ($logado.Count -gt 0) {
         # Dono da tarefa = o usuário logado (iniciada na hora, sem gatilho). Grupo "Usuários" não
         # aceita Start-ScheduledTask manual (erro "arquivo não encontrado").
@@ -97,6 +102,22 @@ try {
         Log "Ninguém logado. A instalação ocorre no próximo logon (tarefa temporária '$TarefaTemp' fica aguardando)." "WARN"
     }
 
+    # 3b) tarefa SYSTEM da tela de bloqueio (substitui a da GPO). A tela de bloqueio é política de
+    # máquina (HKLM): só o Atualizar-Wallpaper.ps1 rodando como SYSTEM consegue aplicá-la, e o
+    # launcher do usuário não. A tarefa tolera o arquivo ainda não existir (o launcher o baixa em
+    # seguida) e roda no boot e de hora em hora, igual à da GPO. Idempotente (-Force).
+    $WallpaperLocal = Join-Path $Base "PopupScripts\Atualizar-Wallpaper.ps1"
+    $TarefaBloqueio = "FirstDecision-TelaBloqueio"
+    $acaoSys = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"if (Test-Path '$WallpaperLocal') { & '$WallpaperLocal' }`""
+    $gatilhos = @(
+        (New-ScheduledTaskTrigger -AtStartup),
+        (New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Days 3650))
+    )
+    $princSys = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+    $cfgSys = New-ScheduledTaskSettingsSet -Hidden -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
+    Register-ScheduledTask -TaskName $TarefaBloqueio -Action $acaoSys -Trigger $gatilhos -Principal $princSys -Settings $cfgSys -Force | Out-Null
+    Log "Tarefa SYSTEM '$TarefaBloqueio' criada (boot + a cada hora)."
+
     # 4) confere o resultado (o bootstrap espera ~60 s antes de sincronizar)
     $ok = $false
     if ($logado.Count -gt 0) {
@@ -108,6 +129,7 @@ try {
     }
 
     if ($ok) {
+        if (Test-Path $WallpaperLocal) { Start-ScheduledTask -TaskName $TarefaBloqueio -ErrorAction SilentlyContinue; Log "Tela de bloqueio: tarefa SYSTEM iniciada agora." }
         Unregister-ScheduledTask -TaskName $TarefaTemp -Confirm:$false -ErrorAction SilentlyContinue
         Remove-Item $Oculto -Force -ErrorAction SilentlyContinue
         $tarefas = @(Get-ScheduledTask -TaskName "FD-Task-*" -ErrorAction SilentlyContinue | ForEach-Object { $_.TaskName })
