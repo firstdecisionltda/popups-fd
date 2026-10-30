@@ -125,11 +125,17 @@ $form.Controls.AddRange(@($picLogo, $btnFechar, $lblTitulo, $lblDesc))
 
 # ====================== AUTO-FECHAR ======================
 if ($TempoAutoFecha -gt 0) {
+    # Conta pelo relógio (e não só pelo intervalo do timer): se o notebook
+    # suspender com o popup aberto, ao acordar o popup fecha na hora em vez
+    # de ficar na tela como se fosse novo.
+    $inicioPopup = Get-Date
     $autoTimer = New-Object System.Windows.Forms.Timer
-    $autoTimer.Interval = $TempoAutoFecha * 1000
+    $autoTimer.Interval = 1000
     $autoTimer.Add_Tick({
-        $autoTimer.Stop()
-        $form.Close()
+        if (((Get-Date) - $inicioPopup).TotalSeconds -ge $TempoAutoFecha) {
+            $autoTimer.Stop()
+            $form.Close()
+        }
     })
     $autoTimer.Start()
 }
