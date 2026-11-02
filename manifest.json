@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.30.01",
+  "version": "2026.11.02.01",
   "config": {
     "checkinUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/36e1e69c89e84bb6b2cf00e189b1e495/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BgiBBEiu3MnFrFTFEXBEpFp7LHOeEr6hXHwZ2y1w2YE",
     "aniversarioUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b688b034bc624b1390753e01c5eadfa9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WjGDxkh2VszrD2kPSj8nnwFbi564bUkVNNxTnMkSCfw"
@@ -34,9 +34,9 @@
   ],
   "assets": [
     {
-      "repoPath": "images/outubro.jpg",
+      "repoPath": "images/novembro.jpg",
       "localName": "wallpaper.jpg",
-      "sha256": "2450EDA9E2C634A95E6AE33B6D2357F764E41E66A5F2B17AA88ABA2BA521192D"
+      "sha256": "E1AA2908E936360C1837495AF55409298D2C07B41E9B51B286892A4819315DED"
     }
   ],
   "scripts": [
