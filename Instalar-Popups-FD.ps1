@@ -100,11 +100,14 @@ try {
     # Processos do sistema ainda abertos (sincronização ou popup em andamento) prenderiam arquivos.
     Get-CimInstance Win32_Process -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^(wscript|powershell)\.exe$' -and $_.CommandLine -match 'FirstDecision\\(Launcher|PopupScripts)' -and $_.ProcessId -ne $PID } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
     Start-Sleep -Seconds 2
-    Get-ChildItem $LauncherDir -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    # Na pasta do launcher apaga SÓ o que o sistema novo instala (e o token antigo). O
+    # BootstrapTelaBloqueio.ps1 fica: é o arquivo que a tarefa da GPO "Tela de Bloqueio" executa.
+    $arquivosLauncher = @("Update-PopupScripts.ps1", "RunHidden.vbs", "InstalarOculto.vbs", "github_token.dat")
+    foreach ($n in $arquivosLauncher) { Remove-Item (Join-Path $LauncherDir $n) -Force -ErrorAction SilentlyContinue }
     Get-ChildItem $CacheDir -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne "Logs" } | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
-    $sobras = @(Get-ChildItem $LauncherDir -Force -ErrorAction SilentlyContinue) + @(Get-ChildItem $CacheDir -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne "Logs" })
+    $sobras = @($arquivosLauncher | ForEach-Object { Get-Item (Join-Path $LauncherDir $_) -Force -ErrorAction SilentlyContinue }) + @(Get-ChildItem $CacheDir -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne "Logs" })
     if ($sobras.Count -gt 0) { Log "Arquivos que não puderam ser apagados (serão sobrescritos): $($sobras.Name -join ', ')." "WARN" }
-    else { Log "Cache e launcher antigos apagados (logs mantidos)." }
+    else { Log "Cache e launcher antigos apagados (logs e BootstrapTelaBloqueio.ps1 mantidos)." }
 
     # 4) launcher novo + permissões para o usuário comum gravar
     New-Item -ItemType Directory -Path $LauncherDir, $CacheDir -Force | Out-Null
