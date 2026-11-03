@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.02.02",
+  "version": "2026.11.03.01",
   "config": {
     "checkinUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/36e1e69c89e84bb6b2cf00e189b1e495/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BgiBBEiu3MnFrFTFEXBEpFp7LHOeEr6hXHwZ2y1w2YE",
     "aniversarioUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b688b034bc624b1390753e01c5eadfa9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WjGDxkh2VszrD2kPSj8nnwFbi564bUkVNNxTnMkSCfw"
@@ -42,7 +42,7 @@
   "scripts": [
     {
       "name": "Notificacao-FirstNews.ps1",
-      "run": false,
+      "run": true,
       "trigger": "news",
       "sha256": "20779023F53C8511E5FB56EE072FC07CB6472E11C5EF1C53AC021C2A7D6A89F0"
     },
