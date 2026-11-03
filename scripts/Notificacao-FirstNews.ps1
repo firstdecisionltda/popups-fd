@@ -202,11 +202,17 @@ $form.Controls.AddRange(@($picLogo, $btnFechar, $lblTitulo, $btnAcao))
 # parte do popup (fundo, logo, titulo) nao faz nada. Para fechar, so o X.
 # ====================== AUTO-FECHAR ======================
 if ($TempoAutoFecha -gt 0) {
+    # Conta pelo relógio (não por um único intervalo longo): se o notebook suspender com o
+    # popup aberto, ao acordar ele já passou do tempo e fecha em até 1 s, em vez de ficar
+    # na tela como se fosse novo.
+    $inicioPopup = Get-Date
     $autoTimer = New-Object System.Windows.Forms.Timer
-    $autoTimer.Interval = $TempoAutoFecha * 1000
+    $autoTimer.Interval = 1000
     $autoTimer.Add_Tick({
-        $autoTimer.Stop()
-        $form.Close()
+        if (((Get-Date) - $inicioPopup).TotalSeconds -ge $TempoAutoFecha) {
+            $autoTimer.Stop()
+            $form.Close()
+        }
     })
     $autoTimer.Start()
 }
