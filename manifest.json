@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.13.01",
+  "version": "2026.11.13.02",
   "config": {
     "checkinUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/36e1e69c89e84bb6b2cf00e189b1e495/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BgiBBEiu3MnFrFTFEXBEpFp7LHOeEr6hXHwZ2y1w2YE",
     "aniversarioUrl": "https://3d7d7aada4f5e46d8eda69bf15cca3.e3.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/b688b034bc624b1390753e01c5eadfa9/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WjGDxkh2VszrD2kPSj8nnwFbi564bUkVNNxTnMkSCfw"
@@ -71,7 +71,7 @@
     },
     {
       "name": "Notificacao-AvisoMicrosoft.ps1",
-      "run": true,
+      "run": false,
       "trigger": "aviso_microsoft",
       "sha256": "216D84C1228D9077FA0E7C3D302AEB1A397D003968729E519F8C423388337D3E"
     },
